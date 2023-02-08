@@ -1,61 +1,63 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './Login.css';
-import axios from 'axios';
 
-async function loginUser(credentials) {
-    console.log(credentials);
-    const url = 'https://social-media-api.eayou.fr/api/users/login'
-    // const url = 'http://localhost:8080/login'
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(credentials)
-    })
-    .then(data => data.json())
-    .then((data) => { return data })
-}
+// async function loginUser(credentials) {
+//     console.log(credentials);
+//     const url = 'https://social-media-api.eayou.fr/api/users/login'
+//     // const url = 'http://localhost:8080/login'
+//     fetch(url, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(credentials)
+//     })
+//     .then(data => data.json())
+//     .then((data) => { return data })
+// }
+
+
 
 
 
 export default function Login({ setToken }) {
     const [username, setUserName] = useState();
+    const [email, setEmail] = useState();
     const [password, setPassword] = useState();
+    const [message, setMessage] = useState("");
+  
+  let handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        // https://social-media-api.eayou.fr/api/users/signup
+      let res = await fetch("http://social-media-api/api/users/signup", {
+        method: "POST",
+        body: JSON.stringify({
+          username: username,
+          email: email,
+          password: password,
+        }),
+      });
+      console.log('res: ',res);
+    
+      const reader = res.body.getReader();
+        const { value } = await reader.read();
+        const result = new TextDecoder("utf-8").decode(value);
+        const data = JSON.parse(result);
+        console.log('data: ',data);
 
-    const handleSubmit = async e => {
-        e.preventDefault();
-        const token = await loginUser({
-            username, 
-            password
-        });
-        // console.log(token);
-        // setToken(token)
+      if (res.status === 200) {
+        setUserName("");
+        setEmail("");
+        setMessage("User created successfully");
+      } else {
+        setMessage("Some error occured");
+      }
+    } catch (err) {
+      console.log(err);
     }
-
-    // const handleLogin = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //       const data = await axios.post("https://social-media-api.eayou.fr/api/users/signup", {
-    //         username: 'test',
-    //         email: 'test@test.fr',
-    //         password: 'test'
-    //       }).then(
-    //         function(response) {
-    //             console.log(response);
-    //         })
-    //         .catch(function(error) {
-    //             console.log(error);
-    //         });
-    //     //   console.log(data);
-    //     //   ctxDispatch({ type: "USER_SIGNIN", payload: data });
-    //     //   localStorage.setItem("userInfo", JSON.stringify(data));
-    //     //   navigate(redirect || "/");
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    //   };
+  };
 
     return(
         <div className="login-wrapper">
@@ -66,12 +68,18 @@ export default function Login({ setToken }) {
                 <input type="text" onChange={e => setUserName(e.target.value)}/>
             </label>
             <label>
+                <p>Email</p>
+                <input type="email" onChange={e => setEmail(e.target.value)}/>
+            </label>
+            <label>
                 <p>Password</p>
                 <input type="password" onChange={e => setPassword(e.target.value)}/>
             </label>
             <div>
                 <button type="submit">Submit</button>
             </div>
+
+            <div className="message">{message ? <p>{message}</p> : null}</div>
         </form>
         </div>
     )
