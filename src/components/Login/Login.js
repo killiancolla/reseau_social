@@ -74,9 +74,7 @@ export default function Login({ setToken }) {
         fetch(url, {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ay1jb2xsYUB1bmljYW5jZXIuZnI6YXplcnR5dWlvcA==',
                 'Content-Type': 'text/plain',
-                'Cookie': 'PHPSESSID=01g9vaujol2ugvp1krdi025rt2'
               },
             body: JSON.stringify({
                 email: email, 
