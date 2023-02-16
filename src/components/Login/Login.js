@@ -11,7 +11,7 @@ import Button from '@mui/joy/Button';
 import Link from '@mui/joy/Link';
 import Alert from '@mui/joy/Alert';
 import IconButton from '@mui/joy/IconButton';
-import CloseRoundedIcon from'@mui/icons-material/CloseRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 
 
@@ -30,70 +30,65 @@ import CloseRoundedIcon from'@mui/icons-material/CloseRounded';
 //     .then((data) => { return data })
 // }
 
-export default function Login({ setToken }) {
+export default function Login({ setToken })
+{
     const [username, setUserName] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [message, setMessage] = useState("");
     const [messageLogin, setMessageLogin] = useState("");
 
-    let handleSignup = async (e) => {
+    let handleSignup = async (e) =>
+    {
         e.preventDefault();
         try {
-        let res = await fetch("https://social-media-api.eayou.fr/api/users/signup", {
-            method: "POST",
-            body: JSON.stringify({
-            username: username,
-            email: email,
-            password: password,
-            }),
-        });
-        
-        const reader = res.body.getReader();
+            let res = await fetch("https://social-media-api.eayou.fr/api/users/signup", {
+                method: "POST",
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password,
+                }),
+            });
+
+            const reader = res.body.getReader();
             const { value } = await reader.read();
             const result = new TextDecoder("utf-8").decode(value);
             const data = JSON.parse(result);
-            console.log('data: ',data);
+            console.log('data: ', data);
 
-        if (res.status === 200) {
-            setUserName("");
-            setEmail("");
-            setMessage("User created successfully");
-        } else {
-            setMessage("Some error occured");
-        }
+            if (res.status === 200) {
+                setUserName("");
+                setEmail("");
+                setMessage("User created successfully");
+            } else {
+                setMessage("Some error occured");
+            }
         } catch (err) {
             console.log(err);
         }
     };
 
-    const handleLogin = async e => {
+    const handleLogin = async e =>
+    {
         e.preventDefault();
 
         const url = 'https://social-media-api.eayou.fr/api/users/login'
         fetch(url, {
             method: 'POST',
             headers: {
+                Authorization: 'Bearer eyJhbGciOiJzaGEyNTYiLCJ0eXAiOiJKV1QifQ.eyJpZCI6IjI5IiwidXNlcm5hbWUiOiJBZG1pbiIsImVtYWlsIjoiYWRtaW5AbWFpbC5jb20iLCJpc0FkbWluIjoiYWRtaW4ifQ.0YC7SFEy3S7Ge7vplF9MVEkrlkOGPzStGeMXMtmBdA0',
                 'Content-Type': 'text/plain',
-              },
+            },
             body: JSON.stringify({
-                email: email, 
+                email: email,
                 password: password
             }),
             redirect: 'follow'
         })
-        .then((response) => console.log(response.json()))
-        // .then((data) => {
-            // if(!isNaN(data)) {
-            //     setToken(data)
-            // } else {
-            //     setMessageLogin("Connexion refusée")
-            // }
-        //     console.log(data);
-        //     console.log(data.token);
-        // })
-        .catch(error => console.log(error)
-        )
+            .then((response) => response.json()).then(result => console.log(result))
+            .catch(error => console.log(error)
+            )
     };
 
     return (
@@ -101,22 +96,22 @@ export default function Login({ setToken }) {
             <main>
                 <Sheet
                     sx={{
-                    width: 300,
-                    mx: 'auto', // margin left & right
-                    my: 4, // margin top & botom
-                    py: 3, // padding top & bottom
-                    px: 2, // padding left & right
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 2,
-                    borderRadius: 'sm',
-                    boxShadow: 'md',
-                }}
-                variant="outlined"
+                        width: 300,
+                        mx: 'auto', // margin left & right
+                        my: 4, // margin top & botom
+                        py: 3, // padding top & bottom
+                        px: 2, // padding left & right
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                        borderRadius: 'sm',
+                        boxShadow: 'md',
+                    }}
+                    variant="outlined"
                 >
                     <div>
                         <Typography level="h4" component="h1">
-                        <b>Welcome!</b>
+                            <b>Welcome!</b>
                         </Typography>
                         <Typography level="body2">Sign in to continue.</Typography>
                     </div>
@@ -124,18 +119,18 @@ export default function Login({ setToken }) {
                         <FormControl>
                             <FormLabel>Email</FormLabel>
                             <Input
-                            type="email"
-                            onChange={e => setEmail(e.target.value)}
+                                type="email"
+                                onChange={e => setEmail(e.target.value)}
                             />
                         </FormControl>
                         <FormControl>
                             <FormLabel>Password</FormLabel>
                             <Input
-                            type="password"
-                            onChange={e => setPassword(e.target.value)}
+                                type="password"
+                                onChange={e => setPassword(e.target.value)}
                             />
                         </FormControl>
-                
+
                         <Button sx={{ mt: 1 /* margin top */ }} type='submit'>Log in</Button>
                     </form>
                     <Typography
@@ -148,7 +143,7 @@ export default function Login({ setToken }) {
                 </Sheet>
             </main>
         </CssVarsProvider>
-      );
+    );
 
     // return(
     //     <div className="login-wrapper">
